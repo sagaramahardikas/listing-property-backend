@@ -3,19 +3,17 @@ package main
 import (
 	"fmt"
 	"net/http"
+
+	"example.com/dana/module/product/config"
 )
 
 func main() {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/listings", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintf(w, "handling task status\n")
-	})
-
-	mux.HandleFunc("/listings/{id}", func(w http.ResponseWriter, r *http.Request) {
-		id := r.PathValue("id")
-		fmt.Println(id)
-		fmt.Fprintf(w, "handling task status with id=%v\n", id)
-	})
+	err := config.RegisterTransactionServiceTextHandler(mux)
+	if err != nil {
+		fmt.Printf("failed to register handler: %v\n", err)
+		return
+	}
 
 	http.ListenAndServe("localhost:8888", mux)
 }

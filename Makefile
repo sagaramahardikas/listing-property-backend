@@ -1,4 +1,4 @@
-.PHONY: lint lint-fix dev-dep dep
+.PHONY: lint lint-fix dev-dep dep docker-dep
 
 lint:
 	go fmt ./...
@@ -13,3 +13,7 @@ dev-dep:
 dep:
 	go mod tidy
 	go mod vendor
+
+docker-dep:
+	docker-compose --env-file dev/.env -f dev/docker-compose.yml up --no-recreate
+

@@ -58,18 +58,19 @@ We provide `docker-compose.yaml` file to hold the non service dependencies of ba
 
 - Create new migration
   ```sh
-  bundle exec rake db:create_migration NAME=<migration_name>
+  update schema.sql
+  atlas migrate diff {migration_filename} --to file://{schema_path} --dev-url "docker://mysql/8/dev"
   ```
 
 - Up migration
   ```sh
-  atlas migrate apply -u ...
+  atlas migrate apply -u "mysql://$(db_username):$(db_password)@$(db_host):$(db_port)/$(db_name)" --dir file://$(migration_dir)
   ```
 
 - Down migration
 
   ```sh
-  atlas migrate down -u ... --to-version ...
+  atlas migrate down -u "mysql://$(db_username):$(db_password)@$(db_host):$(db_port)/$(db_name)" --dir file://$(migration_dir) --to-version $(version) --dev-url "docker://mysql/8/example"
   ```
 
 ## Unit Test and Linter

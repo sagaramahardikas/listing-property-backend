@@ -24,7 +24,7 @@ test:
 	go tool cover -func=coverage.out
 
 cobertura:
-	gocover-cobertura < coverage.out > cobertura.xml
+	gocover-cobertura < coverage.out > coverage.xml
 
 docker-dep:
 	docker-compose --env-file dev/.env -f dev/docker-compose.yml up --no-recreate

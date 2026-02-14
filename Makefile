@@ -24,6 +24,7 @@ test:
 	go tool cover -func=coverage.out
 
 cobertura:
+	go install github.com/boumenot/gocover-cobertura@latest
 	gocover-cobertura < coverage.out > cobertura.xml
 
 docker-dep:

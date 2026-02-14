@@ -2,6 +2,8 @@
 
 GO_PACKAGES ?= $(shell go list ./... | grep -v -E 'mock|config|cmd')
 
+GO_PACKAGES ?= $(shell go list ./... | grep -v -E 'mock|config|cmd')
+
 lint:
 	go fmt ./...
 	golangci-lint run --concurrency 2 --color always --timeout 10m0s

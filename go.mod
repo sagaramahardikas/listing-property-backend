@@ -7,8 +7,9 @@ require (
 	github.com/Masterminds/squirrel v1.5.4
 	github.com/go-sql-driver/mysql v1.9.3
 	github.com/kelseyhightower/envconfig v1.4.0
-	github.com/stretchr/testify v1.7.5
+	github.com/stretchr/testify v1.9.0
 	github.com/subosito/gotenv v1.6.0
+	go.uber.org/mock v0.6.0
 )
 
 require (

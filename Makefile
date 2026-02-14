@@ -8,6 +8,7 @@ lint-fix:
 	golangci-lint run --color always --fix
 
 dev-dep:
+	go install go.uber.org/mock/mockgen@latest
 	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.7
 
 dep:

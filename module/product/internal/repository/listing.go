@@ -9,11 +9,16 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-type ListingRepository struct {
+type listingRepository struct {
 	db *sql.DB
 }
 
-func (r *ListingRepository) List(ctx context.Context) ([]entity.Listing, error) {
+type ListingRepository interface {
+	List(ctx context.Context) ([]entity.Listing, error)
+	GetByID(ctx context.Context, id string) (entity.Listing, error)
+}
+
+func (r *listingRepository) List(ctx context.Context) ([]entity.Listing, error) {
 	query := sq.Select(
 		"id",
 		"name",
@@ -38,7 +43,7 @@ func (r *ListingRepository) List(ctx context.Context) ([]entity.Listing, error) 
 	return listings, nil
 }
 
-func (r *ListingRepository) GetByID(ctx context.Context, id string) (entity.Listing, error) {
+func (r *listingRepository) GetByID(ctx context.Context, id string) (entity.Listing, error) {
 	query := sq.Select(
 		"id",
 		"name",
@@ -58,8 +63,8 @@ func (r *ListingRepository) GetByID(ctx context.Context, id string) (entity.List
 	return listing, nil
 }
 
-func NewListingRepository(db *sql.DB) *ListingRepository {
-	return &ListingRepository{
+func NewListingRepository(db *sql.DB) ListingRepository {
+	return &listingRepository{
 		db: db,
 	}
 }

@@ -19,7 +19,7 @@ jobs:
           go install github.com/boumenot/gocover-cobertura@latest
           export PATH="$PATH:$(go env GOPATH)/bin"
           make cobertura
-          
+
       - name: Code Coverage Report
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
@@ -27,4 +27,8 @@ jobs:
           badge: true
           fail_below_min: true
           format: markdown
+          hide_branch_rate: false
+          hide_complexity: true
+          indicators: true
+          output: both
           thresholds: '75 85'

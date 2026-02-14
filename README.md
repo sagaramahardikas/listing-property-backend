@@ -40,7 +40,7 @@
 
 - Start the gateway server
   ```sh
-  go run cmd/cli/main.go
+  make start-server
   ```
 
 ## Local development using docker-compose

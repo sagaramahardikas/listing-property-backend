@@ -72,7 +72,7 @@ func TestListingHandler_List(t *testing.T) {
 				usecase: mock.NewMockListingUsecase(ctrl),
 			}
 
-			r := httptest.NewRequest(http.MethodGet, "http://localhost/listings", nil)
+			r := httptest.NewRequest(http.MethodGet, "http://localhost/products/listings", nil)
 			w := httptest.NewRecorder()
 			handler := handler.NewListingHandler(mock.usecase)
 			if tc.mockFn != nil {
@@ -133,7 +133,7 @@ func TestListingHandler_GetListing(t *testing.T) {
 				usecase: mock.NewMockListingUsecase(ctrl),
 			}
 
-			r := httptest.NewRequest(http.MethodGet, "http://localhost/listings/123", nil)
+			r := httptest.NewRequest(http.MethodGet, "http://localhost/products/listings/123", nil)
 			r.SetPathValue("id", tc.id)
 			w := httptest.NewRecorder()
 			handler := handler.NewListingHandler(mock.usecase)

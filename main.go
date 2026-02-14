@@ -9,7 +9,7 @@ import (
 
 func main() {
 	mux := http.NewServeMux()
-	err := config.RegisterTransactionServiceTextHandler(mux)
+	err := config.RegisterProductGatewayHandler(mux)
 	if err != nil {
 		fmt.Printf("failed to register handler: %v\n", err)
 		return

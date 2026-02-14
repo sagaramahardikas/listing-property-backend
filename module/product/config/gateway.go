@@ -5,6 +5,7 @@ import (
 
 	"example.com/dana/module/product/internal/handler"
 	"example.com/dana/module/product/internal/repository"
+	"example.com/dana/module/product/internal/usecase"
 )
 
 func RegisterTransactionServiceTextHandler(mux *http.ServeMux) error {
@@ -18,9 +19,9 @@ func RegisterTransactionServiceTextHandler(mux *http.ServeMux) error {
 		return err
 	}
 
-	listingHandler := handler.NewListingHandler()
-	_ = repository.NewListingRepository(db)
-
+	listingRepo := repository.NewListingRepository(db)
+	listingUsecase := usecase.NewListingUsecase(listingRepo)
+	listingHandler := handler.NewListingHandler(listingUsecase)
 	mux.HandleFunc("/listings", listingHandler.ListListings())
 	mux.HandleFunc("/listings/{id}", listingHandler.GetListing())
 

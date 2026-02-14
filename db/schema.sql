@@ -1,11 +1,12 @@
 -- Create "listings" table
 CREATE TABLE `listings` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `price` int NOT NULL,
   `description` text,
   `facilities` text,
-  `galleries` text,
+  `banner` text,
+  `images` text,
   `terms_and_conditions` text,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

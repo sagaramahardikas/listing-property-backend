@@ -21,10 +21,11 @@ type ListingRepository interface {
 func (r *listingRepository) List(ctx context.Context) ([]entity.Listing, error) {
 	query := sq.Select(
 		"id",
-		"name",
+		"title",
 		"description",
-		"galleries",
+		"images",
 		"facilities",
+		"banner",
 		"price",
 		"terms_and_conditions",
 	).From("listings")
@@ -46,10 +47,11 @@ func (r *listingRepository) List(ctx context.Context) ([]entity.Listing, error) 
 func (r *listingRepository) GetByID(ctx context.Context, id string) (entity.Listing, error) {
 	query := sq.Select(
 		"id",
-		"name",
+		"title",
 		"description",
-		"galleries",
+		"images",
 		"facilities",
+		"banner",
 		"price",
 		"terms_and_conditions",
 	).From("listings").Where(sq.Eq{"id": id})
@@ -82,22 +84,23 @@ func scanListings(rows *sql.Rows) ([]entity.Listing, error) {
 
 	for rows.Next() {
 		var listing entity.Listing
-		var galleries sql.NullString
+		var images sql.NullString
 		var facilities sql.NullString
 
 		if err := rows.Scan(
 			&listing.ID,
 			&listing.Title,
 			&listing.Description,
-			&galleries,
+			&images,
 			&facilities,
+			&listing.Banner,
 			&listing.Price,
 			&listing.TermsAndConditions,
 		); err != nil {
 			return nil, err
 		}
 
-		listing.Images = parseStringList(galleries.String)
+		listing.Images = parseStringList(images.String)
 		listing.Facilities = parseStringList(facilities.String)
 
 		listings = append(listings, listing)
@@ -112,15 +115,16 @@ func scanListings(rows *sql.Rows) ([]entity.Listing, error) {
 
 func scanListing(row sq.RowScanner) (entity.Listing, error) {
 	var listing entity.Listing
-	var galleries sql.NullString
+	var images sql.NullString
 	var facilities sql.NullString
 
 	if err := row.Scan(
 		&listing.ID,
 		&listing.Title,
 		&listing.Description,
-		&galleries,
+		&images,
 		&facilities,
+		&listing.Banner,
 		&listing.Price,
 		&listing.TermsAndConditions,
 	); err != nil {
@@ -131,7 +135,7 @@ func scanListing(row sq.RowScanner) (entity.Listing, error) {
 		return entity.Listing{}, err
 	}
 
-	listing.Images = parseStringList(galleries.String)
+	listing.Images = parseStringList(images.String)
 	listing.Facilities = parseStringList(facilities.String)
 
 	return listing, nil

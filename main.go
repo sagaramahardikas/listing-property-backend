@@ -15,5 +15,5 @@ func main() {
 		return
 	}
 
-	http.ListenAndServe("localhost:8888", mux)
+	http.ListenAndServe("0.0.0.0:8888", mux)
 }

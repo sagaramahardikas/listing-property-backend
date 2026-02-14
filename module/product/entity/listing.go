@@ -1,18 +1,10 @@
 package entity
 
-type ListListingResponse struct {
-	Data DataListListing `json:"data"`
-}
-
-type GetListingResponse struct {
-	Data DataGetListing `json:"data"`
-}
-
-type DataListListing struct {
+type ListResponse struct {
 	Listings []Listing `json:"listings"`
 }
 
-type DataGetListing struct {
+type GetResponse struct {
 	Listing Listing `json:"listing"`
 }
 

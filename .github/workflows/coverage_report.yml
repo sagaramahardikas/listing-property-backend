@@ -11,10 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - name: Run test
-      run: make test
-    - name: Run Cobertura
-      run: make cobertura
+    - name: Run tests and coverage
+      run: make test && make cobertura
     - name: Code Coverage Report
       uses: irongut/CodeCoverageSummary@v1.3.0
       with:

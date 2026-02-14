@@ -28,6 +28,7 @@ func TestListingRepository_List(t *testing.T) {
 					Price:              100000,
 					Facilities:         []string{"Facility 1", "Facility 2"},
 					Images:             []string{"image1.jpg", "image2.jpg"},
+					Banner:             "banner1.jpg",
 					Description:        "This is a test listing.",
 					TermsAndConditions: "These are the terms and conditions.",
 				},
@@ -37,6 +38,7 @@ func TestListingRepository_List(t *testing.T) {
 					Price:              200000,
 					Facilities:         []string{"Facility A", "Facility B"},
 					Images:             []string{"imageA.jpg", "imageB.jpg"},
+					Banner:             "banner2.jpg",
 					Description:        "This is another test listing.",
 					TermsAndConditions: "These are the terms and conditions for listing 2.",
 				},
@@ -49,7 +51,7 @@ func TestListingRepository_List(t *testing.T) {
 			db, mock, err := sqlmock.New()
 			assert.Nil(t, err)
 			repo := repository.NewListingRepository(db)
-			rows := mock.NewRows([]string{"id", "name", "description", "galleries", "facilities", "price", "terms_and_conditions"})
+			rows := mock.NewRows([]string{"id", "title", "description", "images", "facilities", "banner", "price", "terms_and_conditions"})
 			for _, listing := range tc.expectedListings {
 				rows.AddRow(
 					listing.ID,
@@ -57,12 +59,13 @@ func TestListingRepository_List(t *testing.T) {
 					listing.Description,
 					strings.Join(listing.Images, ","),
 					strings.Join(listing.Facilities, ","),
+					listing.Banner,
 					listing.Price,
 					listing.TermsAndConditions,
 				)
 			}
 
-			mock.ExpectQuery(regexp.QuoteMeta("SELECT id, name, description, galleries, facilities, price, terms_and_conditions FROM listings")).
+			mock.ExpectQuery(regexp.QuoteMeta("SELECT id, title, description, images, facilities, banner, price, terms_and_conditions FROM listings")).
 				WillReturnRows(rows)
 
 			got, err := repo.List(context.Background())
@@ -101,6 +104,7 @@ func TestListingRepository_GetByID(t *testing.T) {
 				Price:              100000,
 				Facilities:         []string{"Facility 1", "Facility 2"},
 				Images:             []string{"image1.jpg", "image2.jpg"},
+				Banner:             "banner1.jpg",
 				Description:        "This is a test listing.",
 				TermsAndConditions: "These are the terms and conditions.",
 			},
@@ -112,21 +116,21 @@ func TestListingRepository_GetByID(t *testing.T) {
 			db, mock, err := sqlmock.New()
 			assert.Nil(t, err)
 			repo := repository.NewListingRepository(db)
-			rows := mock.NewRows([]string{"id", "name", "description", "galleries", "facilities", "price", "terms_and_conditions"})
+			rows := mock.NewRows([]string{"id", "title", "description", "images", "facilities", "banner", "price", "terms_and_conditions"})
 			if tc.expectedErr == nil {
-
 				rows.AddRow(
 					tc.expectedListing.ID,
 					tc.expectedListing.Title,
 					tc.expectedListing.Description,
 					strings.Join(tc.expectedListing.Images, ","),
 					strings.Join(tc.expectedListing.Facilities, ","),
+					tc.expectedListing.Banner,
 					tc.expectedListing.Price,
 					tc.expectedListing.TermsAndConditions,
 				)
 			}
 
-			mock.ExpectQuery(regexp.QuoteMeta("SELECT id, name, description, galleries, facilities, price, terms_and_conditions FROM listings WHERE id = ?")).
+			mock.ExpectQuery(regexp.QuoteMeta("SELECT id, title, description, images, facilities, banner, price, terms_and_conditions FROM listings WHERE id = ?")).
 				WithArgs(tc.id).
 				WillReturnRows(rows).
 				WillReturnError(tc.dbGetError)

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"os"
 
 	"example.com/dana/module/product/config"
 )
@@ -15,5 +16,9 @@ func main() {
 		return
 	}
 
-	http.ListenAndServe("0.0.0.0:8888", mux)
+	err = http.ListenAndServe("0.0.0.0:8888", mux)
+	if err != nil {
+		fmt.Printf("failed to start server: %v\n", err)
+		os.Exit(1)
+	}
 }

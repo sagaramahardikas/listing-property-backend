@@ -22,3 +22,6 @@ db-migrate:
 
 db-rollback:
 	atlas migrate down -u "mysql://$(db_username):$(db_password)@$(db_host):$(db_port)/$(db_name)" --dir file://$(migration_dir) --to-version $(version) --dev-url "docker://mysql/8/example"
+
+start-server:
+	go run main.go

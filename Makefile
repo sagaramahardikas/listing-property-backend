@@ -1,4 +1,6 @@
-.PHONY: lint lint-fix dev-dep dep docker-dep db-migrate db-rollback
+.PHONY: lint lint-fix dev-dep dep test cobertura docker-dep db-migrate db-rollback
+
+GO_PACKAGES ?= $(shell go list ./... | grep -v -E 'mock|config|cmd')
 
 GO_PACKAGES ?= $(shell go list ./... | grep -v -E 'mock|config|cmd')
 
@@ -20,6 +22,9 @@ dep:
 test:
 	go test -race -v ${GO_PACKAGES} -coverprofile=coverage.out -covermode=atomic
 	go tool cover -func=coverage.out
+
+cobertura:
+	gocover-cobertura < coverage.out > coverage.xml
 
 docker-dep:
 	docker-compose --env-file dev/.env -f dev/docker-compose.yml up --no-recreate

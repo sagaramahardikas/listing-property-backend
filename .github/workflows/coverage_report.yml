@@ -10,14 +10,21 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
-    - name: Run tests and coverage
-      run: make test && make cobertura
-    - name: Code Coverage Report
-      uses: irongut/CodeCoverageSummary@v1.3.0
-      with:
-        filename: coverage.xml
-        badge: true
-        fail_below_min: true
-        format: markdown
-        thresholds: '75 85'
+      - uses: actions/checkout@v4
+      - name: Run test
+        run: make test
+
+      - name: Run Cobertura
+        run: |
+          go install github.com/boumenot/gocover-cobertura@latest
+          export PATH="$PATH:$(go env GOPATH)/bin"
+          make cobertura
+          
+      - name: Code Coverage Report
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage.xml
+          badge: true
+          fail_below_min: true
+          format: markdown
+          thresholds: '75 85'

@@ -42,6 +42,7 @@ func TestListingHandler_List(t *testing.T) {
 
 	testCases := []struct {
 		name           string
+		payload        entity.ListPayload
 		mockFn         func(mock *mockListingHandler)
 		expectedResult string
 	}{
@@ -49,16 +50,17 @@ func TestListingHandler_List(t *testing.T) {
 			name: "error: usecase error",
 			mockFn: func(mocks *mockListingHandler) {
 				mocks.usecase.EXPECT().List(
-					gomock.Any(),
+					gomock.Any(), entity.ListPayload{},
 				).Return([]entity.Listing{}, errors.New("usecase error"))
 			},
 			expectedResult: "usecase error\n",
 		},
 		{
-			name: "success: found",
+			name:    "success: found",
+			payload: entity.ListPayload{Search: "Test"},
 			mockFn: func(mocks *mockListingHandler) {
 				mocks.usecase.EXPECT().List(
-					gomock.Any(),
+					gomock.Any(), entity.ListPayload{Search: "Test"},
 				).Return(listings, nil)
 			},
 			expectedResult: "{\"listings\":[{\"id\":\"123\",\"banner\":\"\",\"title\":\"Test Listing\",\"description\":\"This is a test listing.\",\"images\":[\"image1.jpg\",\"image2.jpg\"],\"facilities\":[\"Facility 1\",\"Facility 2\"],\"price\":100000,\"terms_and_conditions\":\"These are the terms and conditions.\"},{\"id\":\"124\",\"banner\":\"\",\"title\":\"Test Listing 2\",\"description\":\"This is another test listing.\",\"images\":[\"imageA.jpg\",\"imageB.jpg\"],\"facilities\":[\"Facility A\",\"Facility B\"],\"price\":200000,\"terms_and_conditions\":\"These are the terms and conditions for listing 2.\"}]}\n",
@@ -72,7 +74,12 @@ func TestListingHandler_List(t *testing.T) {
 				usecase: mock.NewMockListingUsecase(ctrl),
 			}
 
-			r := httptest.NewRequest(http.MethodGet, "http://localhost/products/listings", nil)
+			queryParam := ""
+			if tc.payload.Search != "" {
+				queryParam = "?search=" + tc.payload.Search
+			}
+
+			r := httptest.NewRequest(http.MethodGet, "http://localhost/products/listings"+queryParam, nil)
 			w := httptest.NewRecorder()
 			handler := handler.NewListingHandler(mock.usecase)
 			if tc.mockFn != nil {

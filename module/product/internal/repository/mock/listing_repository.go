@@ -57,16 +57,16 @@ func (mr *MockListingRepositoryMockRecorder) GetByID(ctx, id any) *gomock.Call {
 }
 
 // List mocks base method.
-func (m *MockListingRepository) List(ctx context.Context) ([]entity.Listing, error) {
+func (m *MockListingRepository) List(ctx context.Context, payload entity.ListPayload) ([]entity.Listing, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", ctx)
+	ret := m.ctrl.Call(m, "List", ctx, payload)
 	ret0, _ := ret[0].([]entity.Listing)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List.
-func (mr *MockListingRepositoryMockRecorder) List(ctx any) *gomock.Call {
+func (mr *MockListingRepositoryMockRecorder) List(ctx, payload any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockListingRepository)(nil).List), ctx)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockListingRepository)(nil).List), ctx, payload)
 }

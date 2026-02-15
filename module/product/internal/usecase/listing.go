@@ -8,7 +8,7 @@ import (
 )
 
 type ListingUsecase interface {
-	List(ctx context.Context) ([]entity.Listing, error)
+	List(ctx context.Context, payload entity.ListPayload) ([]entity.Listing, error)
 	GetByID(ctx context.Context, id string) (entity.Listing, error)
 }
 
@@ -16,8 +16,8 @@ type listingUsecase struct {
 	listingRepo repository.ListingRepository
 }
 
-func (u *listingUsecase) List(ctx context.Context) ([]entity.Listing, error) {
-	return u.listingRepo.List(ctx)
+func (u *listingUsecase) List(ctx context.Context, payload entity.ListPayload) ([]entity.Listing, error) {
+	return u.listingRepo.List(ctx, payload)
 }
 
 func (u *listingUsecase) GetByID(ctx context.Context, id string) (entity.Listing, error) {

@@ -17,10 +17,28 @@ import (
 func TestListingRepository_List(t *testing.T) {
 	testCases := []struct {
 		name             string
+		payload          entity.ListPayload
 		expectedListings []entity.Listing
 	}{
 		{
-			name: "success: found",
+			name:    "success: found with filter search",
+			payload: entity.ListPayload{Search: "villa"},
+			expectedListings: []entity.Listing{
+				{
+					ID:                 "123",
+					Title:              "Test Villa",
+					Price:              100000,
+					Facilities:         []string{"Facility 1", "Facility 2"},
+					Images:             []string{"image1.jpg", "image2.jpg"},
+					Banner:             "banner1.jpg",
+					Description:        "This is a test villa.",
+					TermsAndConditions: "These are the terms and conditions.",
+				},
+			},
+		},
+		{
+			name:    "success: found without filter",
+			payload: entity.ListPayload{},
 			expectedListings: []entity.Listing{
 				{
 					ID:                 "123",
@@ -68,7 +86,7 @@ func TestListingRepository_List(t *testing.T) {
 			mock.ExpectQuery(regexp.QuoteMeta("SELECT id, title, description, images, facilities, banner, price, terms_and_conditions FROM listings")).
 				WillReturnRows(rows)
 
-			got, err := repo.List(context.Background())
+			got, err := repo.List(context.Background(), tc.payload)
 			assert.Nil(t, err)
 			assert.Equal(t, tc.expectedListings, got)
 		})

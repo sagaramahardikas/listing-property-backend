@@ -15,7 +15,8 @@ type ListingHandler struct {
 
 func (h *ListingHandler) ListListings() func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
-		listings, err := h.usecase.List(context.Background())
+		payload := entity.ListPayload{Search: r.URL.Query().Get("search")}
+		listings, err := h.usecase.List(context.Background(), payload)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return

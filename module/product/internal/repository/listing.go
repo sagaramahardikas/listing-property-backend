@@ -14,11 +14,11 @@ type listingRepository struct {
 }
 
 type ListingRepository interface {
-	List(ctx context.Context) ([]entity.Listing, error)
+	List(ctx context.Context, payload entity.ListPayload) ([]entity.Listing, error)
 	GetByID(ctx context.Context, id string) (entity.Listing, error)
 }
 
-func (r *listingRepository) List(ctx context.Context) ([]entity.Listing, error) {
+func (r *listingRepository) List(ctx context.Context, payload entity.ListPayload) ([]entity.Listing, error) {
 	query := sq.Select(
 		"id",
 		"title",
@@ -29,6 +29,10 @@ func (r *listingRepository) List(ctx context.Context) ([]entity.Listing, error) 
 		"price",
 		"terms_and_conditions",
 	).From("listings")
+
+	if payload.Search != "" {
+		query = query.Where(sq.Like{"title": "%" + payload.Search + "%"})
+	}
 
 	rows, err := query.RunWith(r.db).QueryContext(ctx)
 	if err != nil {
@@ -80,7 +84,7 @@ func parseStringList(value string) []string {
 }
 
 func scanListings(rows *sql.Rows) ([]entity.Listing, error) {
-	var listings []entity.Listing
+	listings := make([]entity.Listing, 0)
 
 	for rows.Next() {
 		var listing entity.Listing

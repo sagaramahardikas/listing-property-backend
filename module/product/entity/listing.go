@@ -18,3 +18,7 @@ type Listing struct {
 	Price              int      `json:"price"`
 	TermsAndConditions string   `json:"terms_and_conditions"`
 }
+
+type ListPayload struct {
+	Search string `json:"search"`
+}

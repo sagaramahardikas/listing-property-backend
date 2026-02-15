@@ -38,29 +38,39 @@ func TestListingUsecase_List(t *testing.T) {
 		},
 	}
 
+	payload := entity.ListPayload{Search: "Listing"}
+
 	testCases := []struct {
 		name             string
-		id               string
+		payload          entity.ListPayload
 		mockFn           func(mock *mockListingUsecase)
 		expectedListings []entity.Listing
 		expectedErr      error
 	}{
 		{
 			name: "error: db connection error",
-			id:   "123",
 			mockFn: func(mocks *mockListingUsecase) {
 				mocks.usecase.EXPECT().List(
-					gomock.Any(),
+					gomock.Any(), entity.ListPayload{},
 				).Return([]entity.Listing{}, errors.New("db connection error"))
 			},
 			expectedErr: errors.New("db connection error"),
 		},
 		{
-			name: "success: found",
-			id:   "123",
+			name:    "success: found with filter search",
+			payload: payload,
 			mockFn: func(mocks *mockListingUsecase) {
 				mocks.usecase.EXPECT().List(
-					gomock.Any(),
+					gomock.Any(), payload,
+				).Return(listings, nil)
+			},
+			expectedListings: listings,
+		},
+		{
+			name: "success: found without filter",
+			mockFn: func(mocks *mockListingUsecase) {
+				mocks.usecase.EXPECT().List(
+					gomock.Any(), entity.ListPayload{},
 				).Return(listings, nil)
 			},
 			expectedListings: listings,
@@ -79,7 +89,7 @@ func TestListingUsecase_List(t *testing.T) {
 				tc.mockFn(mock)
 			}
 
-			listings, err := usecase.List(context.Background())
+			listings, err := usecase.List(context.Background(), tc.payload)
 			if tc.expectedErr != nil {
 				assert.Equal(t, tc.expectedErr, err)
 			} else {

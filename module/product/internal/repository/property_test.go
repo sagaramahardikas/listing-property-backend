@@ -14,16 +14,16 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestListingRepository_List(t *testing.T) {
+func TestPropertyRepository_List(t *testing.T) {
 	testCases := []struct {
-		name             string
-		payload          entity.ListPayload
-		expectedListings []entity.Property
+		name               string
+		payload            entity.ListPayload
+		expectedProperties []entity.Property
 	}{
 		{
 			name:    "success: found with filter search",
 			payload: entity.ListPayload{Search: "villa"},
-			expectedListings: []entity.Property{
+			expectedProperties: []entity.Property{
 				{
 					ID:                 "123",
 					Title:              "Test Villa",
@@ -38,26 +38,26 @@ func TestListingRepository_List(t *testing.T) {
 		},
 		{
 			name: "success: found without filter",
-			expectedListings: []entity.Property{
+			expectedProperties: []entity.Property{
 				{
 					ID:                 "123",
-					Title:              "Test Listing",
+					Title:              "Test Property",
 					Price:              100000,
 					Facilities:         []string{"Facility 1", "Facility 2"},
 					Images:             []string{"image1.jpg", "image2.jpg"},
 					Banner:             "banner1.jpg",
-					Description:        "This is a test listing.",
+					Description:        "This is a test property.",
 					TermsAndConditions: "These are the terms and conditions.",
 				},
 				{
 					ID:                 "124",
-					Title:              "Test Listing 2",
+					Title:              "Test Property 2",
 					Price:              200000,
 					Facilities:         []string{"Facility A", "Facility B"},
 					Images:             []string{"imageA.jpg", "imageB.jpg"},
 					Banner:             "banner2.jpg",
-					Description:        "This is another test listing.",
-					TermsAndConditions: "These are the terms and conditions for listing 2.",
+					Description:        "This is another test property.",
+					TermsAndConditions: "These are the terms and conditions for property 2.",
 				},
 			},
 		},
@@ -69,7 +69,7 @@ func TestListingRepository_List(t *testing.T) {
 			assert.Nil(t, err)
 			repo := repository.NewPropertyRepository(db)
 			rows := mock.NewRows([]string{"id", "title", "description", "images", "facilities", "banner", "price", "terms_and_conditions"})
-			for _, property := range tc.expectedListings {
+			for _, property := range tc.expectedProperties {
 				rows.AddRow(
 					property.ID,
 					property.Title,
@@ -92,7 +92,7 @@ func TestListingRepository_List(t *testing.T) {
 
 			got, err := repo.List(context.Background(), tc.payload)
 			assert.Nil(t, err)
-			assert.Equal(t, tc.expectedListings, got)
+			assert.Equal(t, tc.expectedProperties, got)
 		})
 	}
 }

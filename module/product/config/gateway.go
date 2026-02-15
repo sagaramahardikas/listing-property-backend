@@ -19,11 +19,11 @@ func RegisterProductGatewayHandler(mux *http.ServeMux) error {
 		return err
 	}
 
-	listingRepo := repository.NewListingRepository(db)
-	listingUsecase := usecase.NewListingUsecase(listingRepo)
-	listingHandler := handler.NewListingHandler(listingUsecase)
-	mux.HandleFunc("/products/listings", listingHandler.ListListings())
-	mux.HandleFunc("/products/listings/{id}", listingHandler.GetListing())
+	propertyRepo := repository.NewPropertyRepository(db)
+	propertyUsecase := usecase.NewPropertyUsecase(propertyRepo)
+	propertyHandler := handler.NewPropertyHandler(propertyUsecase)
+	mux.HandleFunc("/products/properties", propertyHandler.ListProperties())
+	mux.HandleFunc("/products/properties/{id}", propertyHandler.GetProperty())
 
 	return nil
 }

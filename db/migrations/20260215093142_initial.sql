@@ -1,5 +1,5 @@
--- Create "listings" table
-CREATE TABLE `listings` (
+-- Create "properties" table
+CREATE TABLE `properties` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL,
   `price` int NOT NULL,

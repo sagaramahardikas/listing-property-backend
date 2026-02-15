@@ -1,14 +1,14 @@
 package entity
 
 type ListResponse struct {
-	Listings []Listing `json:"listings"`
+	Properties []Property `json:"properties"`
 }
 
 type GetResponse struct {
-	Listing Listing `json:"listing"`
+	Property Property `json:"property"`
 }
 
-type Listing struct {
+type Property struct {
 	ID                 string   `json:"id"`
 	Banner             string   `json:"banner"`
 	Title              string   `json:"title"`
